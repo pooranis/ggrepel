@@ -80,6 +80,7 @@
 #'   number. Defaults to 0.5. (Default unit is lines, but other units can be
 #'   specified by passing \code{unit(x, "units")}).
 #' @param arrow specification for arrow heads, as created by \code{\link[grid]{arrow}}
+#' @param segment.type linetype for segment; see \code{lty} parameter in \code{\link[graphics]{par}}
 #' @param force Force of repulsion between overlapping text labels. Defaults
 #'   to 1.
 #' @param force_pull Force of attraction between a text label and its
@@ -171,6 +172,7 @@ geom_text_repel <- function(
   segment.alpha = NULL,
   min.segment.length = 0.5,
   arrow = NULL,
+  segment.type = "solid",
   force = 1,
   force_pull = 1,
   max.iter = 2000,
@@ -208,6 +210,7 @@ geom_text_repel <- function(
       segment.alpha = segment.alpha,
       min.segment.length = to_unit(min.segment.length),
       arrow = arrow,
+      segment.type = segment.type,
       force = force,
       force_pull = force_pull,
       max.iter = max.iter,
@@ -247,6 +250,7 @@ GeomTextRepel <- ggproto("GeomTextRepel", Geom,
     segment.alpha = NULL,
     min.segment.length = 0.5,
     arrow = NULL,
+    segment.type = NULL,
     force = 1,
     force_pull = 1,
     max.iter = 2000,
@@ -307,6 +311,7 @@ GeomTextRepel <- ggproto("GeomTextRepel", Geom,
       segment.alpha = segment.alpha,
       min.segment.length = to_unit(min.segment.length),
       arrow = arrow,
+      segment.type=segment.type,
       force = force,
       force_pull = force_pull,
       max.iter = max.iter,
@@ -417,6 +422,7 @@ makeContent.textrepeltree <- function(x) {
       ),
       segment.gp = gpar(
         col = scales::alpha(x$segment.colour %||% row$colour, x$segment.alpha %||% row$alpha),
+        lty = x$segment.type,
         lwd = x$segment.size * .pt
       ),
       arrow = x$arrow,
